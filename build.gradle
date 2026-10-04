@@ -1,0 +1,33 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // Depends on the locally-published fork of temporalio/sdk-java that contains the conflict
+    // token retry fix. Build the SDK via `./gradlew publishToMavenLocal` from the sdk-java repo
+    // before running this demo.
+    implementation 'io.temporal:temporal-sdk:1.41.0-SNAPSHOT'
+
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+    runtimeOnly 'org.slf4j:slf4j-simple:2.0.13'
+}
+
+application {
+    mainClass = 'com.example.ConflictDemo'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
